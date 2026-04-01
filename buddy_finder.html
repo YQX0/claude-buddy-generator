@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Buddy 爆破器 Pro Max </title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: #0d1117;
+      color: #e6edf3;
+      font-family: 'Segoe UI', monospace;
+      padding: 20px;
+    }
+
+    h1 {
+      font-size: 1.3em;
+      color: #58a6ff;
+      margin-bottom: 4px;
+    }
+
+    .sub {
+      color: #8b949e;
+      font-size: 0.85em;
+      margin-bottom: 20px;
+    }
+
+    .card {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+
+    label {
+      display: block;
+      color: #8b949e;
+      font-size: 0.8em;
+      margin-bottom: 4px;
+    }
+
+    select,
+    input {
+      background: #0d1117;
+      border: 1px solid #30363d;
+      color: #e6edf3;
+      border-radius: 6px;
+      padding: 6px 10px;
+      width: 100%;
+      margin-bottom: 12px;
+      font-size: 0.9em;
+    }
+
+    .row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .row>div {
+      flex: 1;
+      min-width: 140px;
+    }
+
+    .btns {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    button {
+      padding: 8px 20px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      font-size: 0.9em;
+      font-weight: 600;
+      transition: opacity .2s;
+    }
+
+    button:disabled {
+      opacity: .4;
+      cursor: not-allowed;
+    }
+
+    #btnStart {
+      background: #238636;
+      color: #fff;
+    }
+
+    #btnStop {
+      background: #da3633;
+      color: #fff;
+    }
+
+    #btnClear {
+      background: #30363d;
+      color: #e6edf3;
+    }
+
+    .progress-bar {
+      background: #21262d;
+      border-radius: 4px;
+      height: 8px;
+      margin: 10px 0 4px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: #58a6ff;
+      transition: width .3s;
+      width: 0;
+    }
+
+    .stats {
+      display: flex;
+      gap: 20px;
+      font-size: 0.8em;
+      color: #8b949e;
+      margin-top: 6px;
+    }
+
+    .stats span {
+      color: #e6edf3;
+    }
+
+    #log {
+      background: #0d1117;
+      border: 1px solid #21262d;
+      border-radius: 6px;
+      padding: 12px;
+      height: 300px;
+      overflow-y: auto;
+      font-size: 0.82em;
+      font-family: monospace;
+    }
+
+    .log-found {
+      color: #3fb950;
+    }
+
+    .log-shiny {
+      color: #f0883e;
+    }
+
+    .log-info {
+      color: #8b949e;
+    }
+
+    .log-err {
+      color: #f85149;
+    }
+
+    #results {
+      margin-top: 0;
+    }
+
+    .result-item {
+      background: #21262d;
+      border-radius: 6px;
+      padding: 10px 14px;
+      margin-bottom: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .result-item-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .result-item .uid {
+      font-family: monospace;
+      color: #58a6ff;
+      font-size: 0.95em;
+      word-break: break-all;
+      background: #0d1117;
+      padding: 6px;
+      border-radius: 4px;
+      border: 1px solid #30363d;
+    }
+
+    .result-item .badge {
+      font-size: 0.78em;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-weight: 600;
+    }
+
+    .legendary {
+      background: #3d1f00;
+      color: #f0883e;
+      border: 1px solid #f0883e55;
+    }
+
+    .epic {
+      background: #2d1f4e;
+      color: #bc8cff;
+      border: 1px solid #bc8cff55;
+    }
+
+    .rare {
+      background: #1f2d4e;
+      color: #58a6ff;
+    }
+
+    .uncommon {
+      background: #1f2d1f;
+      color: #3fb950;
+    }
+
+    .common {
+      background: #30363d;
+      color: #8b949e;
+    }
+
+    .shiny-badge {
+      background: #4e3800;
+      color: #ffd700;
+      margin-right: 8px;
+      border: 1px solid #ffd70066;
+    }
+
+    .copy-btn {
+      background: #30363d;
+      color: #8b949e;
+      border: none;
+      padding: 4px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.8em;
+      white-space: nowrap;
+    }
+
+    .copy-btn:hover {
+      color: #e6edf3;
+      background: #4b535d;
+    }
+
+    .section-title {
+      color: #8b949e;
+      font-size: 0.75em;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>🐾 Buddy 爆破器 Pro Max</h1>
+
+  <div class="card">
+    <div class="row">
+      <div>
+        <label>稀有度 (Rarity)</label>
+        <select id="targetRarity">
+          <option value="any">任意 (Any)</option>
+          <option value="legendary">传说 Legendary</option>
+          <option value="epic">史诗 Epic</option>
+          <option value="rare">稀有 Rare</option>
+          <option value="uncommon">不凡 Uncommon</option>
+          <option value="common">普通 Common</option>
+        </select>
+      </div>
+      <div>
+        <label>物种 (Species)</label>
+        <select id="targetSpecies">
+          <option value="any">任意 (Any)</option>
+          <option value="duck">鸭子 (duck)</option>
+          <option value="goose">鹅 (goose)</option>
+          <option value="blob">史莱姆 (blob)</option>
+          <option value="cat">猫 (cat)</option>
+          <option value="dragon">龙 (dragon)</option>
+          <option value="octopus">章鱼 (octopus)</option>
+          <option value="owl">猫头鹰 (owl)</option>
+          <option value="penguin">企鹅 (penguin)</option>
+          <option value="turtle">乌龟 (turtle)</option>
+          <option value="snail">蜗牛 (snail)</option>
+          <option value="ghost">幽灵 (ghost)</option>
+          <option value="axolotl">蝾螈 (axolotl)</option>
+          <option value="capybara">水豚 (capybara)</option>
+          <option value="cactus">仙人掌 (cactus)</option>
+          <option value="robot">机器人 (robot)</option>
+          <option value="rabbit">兔子 (rabbit)</option>
+          <option value="mushroom">蘑菇 (mushroom)</option>
+          <option value="chonk">胖墩 (chonk)</option>
+        </select>
+      </div>
+      <div>
+        <label>闪光 (Shiny)</label>
+        <select id="targetShiny">
+          <option value="any">任意 (Any)</option>
+          <option value="true">仅闪光 ✨</option>
+          <option value="false">非闪光</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row">
+      <div>
+        <label>帽子 (Hat)</label>
+        <select id="targetHat">
+          <option value="any">任意 (Any)</option>
+          <option value="none">无 (none)</option>
+          <option value="crown">皇冠 (crown)</option>
+          <option value="tophat">高顶礼帽 (tophat)</option>
+          <option value="propeller">螺旋桨帽 (propeller)</option>
+          <option value="halo">光环 (halo)</option>
+          <option value="wizard">法师帽 (wizard)</option>
+          <option value="beanie">冷帽 (beanie)</option>
+          <option value="tinyduck">小黄鸭 (tinyduck)</option>
+        </select>
+      </div>
+      <div>
+        <label>眼睛 (Eye)</label>
+        <select id="targetEye">
+          <option value="any">任意 (Any)</option>
+          <option value="·">小圆点 (·)</option>
+          <option value="✦">星星眼 (✦)</option>
+          <option value="×">叉叉眼 (×)</option>
+          <option value="◉">大圆眼 (◉)</option>
+          <option value="@">蚊香眼 (@)</option>
+          <option value="°">空心眼 (°)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row" style="margin-top: 8px; border-top: 1px solid #30363d; padding-top: 12px;">
+      <div>
+        <label>生成的 ID 类型 (搜索范围)</label>
+        <select id="searchMode">
+          <option value="randomHex" selected>🚀 随机 64 位长字符</option>
+          <option value="short">短字符串 (a-z0-9, 2~4位)</option>
+          <option value="numbers">纯数字 (1~9999999)</option>
+        </select>
+      </div>
+      <div>
+        <label>最大结果</label>
+        <select id="maxResults">
+          <option value="1" selected>1 个</option>
+          <option value="5">5 个</option>
+          <option value="20">20 个</option>
+        </select>
+      </div>
+      <div>
+        <label>每批处理(算力)</label>
+        <select id="batchSize">
+          <option value="50000">5万（低CPU）</option>
+          <option value="200000" selected>20万（推荐）</option>
+          <option value="500000">50万（极速）</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="btns">
+      <button id="btnStart">▶ 开始搜索</button>
+      <button id="btnStop" disabled>⏹ 停止</button>
+      <button id="btnClear">🗑 清空结果</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+    <div class="stats">
+      已尝试: <span id="statTried">0</span> &nbsp;|&nbsp;
+      已找到: <span id="statFound">0</span> &nbsp;|&nbsp;
+      速度: <span id="statSpeed">0</span>/s &nbsp;|&nbsp;
+      状态: <span id="statStatus">待机</span>
+    </div>
+  </div>
+
+  <div class="card" id="results">
+    <div class="section-title">搜索结果 (自带 64 位金钥匙 🔑)</div>
+    <div id="resultList">
+      <p class="log-info" style="font-size:0.85em">暂无结果，点击「开始搜索」</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="section-title">日志</div>
+    <div id="log"></div>
+  </div>
+
+  <script>
+    // ── 算法核心 ─────────────────────────────────────────────
+
+    function hashFnv1a(str) {
+      let h = 0x811c9dc5;
+      for (let i = 0; i < str.length; i++) {
+        h ^= str.charCodeAt(i);
+        h = Math.imul(h, 0x01000193) >>> 0;
+      }
+      return h >>> 0;
+    }
+
+    function mulberry32(seed) {
+      return function () {
+        seed |= 0;
+        seed = (seed + 0x6d2b79f5) | 0;
+        let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+        t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+        return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+      }
+    }
+
+    const RARITIES = ['common', 'uncommon', 'rare', 'epic', 'legendary'];
+    const RARITY_WEIGHTS = { common: 60, uncommon: 25, rare: 10, epic: 4, legendary: 1 };
+    const SPECIES_FLAT = ['duck', 'goose', 'blob', 'cat', 'dragon', 'octopus', 'owl', 'penguin', 'turtle', 'snail', 'ghost', 'axolotl', 'capybara', 'cactus', 'robot', 'rabbit', 'mushroom', 'chonk'];
+    const EYES = ['·', '✦', '×', '◉', '@', '°'];
+    const HATS = ['none', 'crown', 'tophat', 'propeller', 'halo', 'wizard', 'beanie', 'tinyduck'];
+
+    function generateBuddy(userId) {
+      const salt = 'friend-2026-401';
+      const seed = hashFnv1a(userId + salt);
+      const rand = mulberry32(seed);
+
+      let roll = rand() * 100;
+      let rarity = 'common';
+      for (const r of RARITIES) {
+        roll -= RARITY_WEIGHTS[r];
+        if (roll < 0) { rarity = r; break; }
+      }
+
+      const species = SPECIES_FLAT[Math.floor(rand() * SPECIES_FLAT.length)];
+      const eye = EYES[Math.floor(rand() * EYES.length)];
+      const hat = rarity === 'common' ? 'none' : HATS[Math.floor(rand() * HATS.length)];
+      const shiny = rand() < 0.01;
+
+      return { rarity, species, eye, hat, shiny };
+    }
+
+    // ── 超高速 64 位十六进制生成器 (替代 Node 的 randomBytes) ────
+    function fastRandomHex() {
+      let s = '';
+      // 循环拼接随机生成的十六进制字符，直到满 64 位
+      while (s.length < 64) {
+        s += Math.random().toString(16).slice(2);
+      }
+      return s.substring(0, 64);
+    }
+
+    // ── 搜索生成器 ────────────────────────────────────────────
+    const CHARS = 'abcdefghijklmnopqrstuvwxyz0123456789';
+
+    function* makeGenerator(mode) {
+      if (mode === 'randomHex') {
+        // 无限生成 64 位长代码
+        while (true) yield fastRandomHex();
+      }
+
+      if (mode === 'numbers') {
+        for (let n = 1; n <= 9999999; n++) yield '' + n;
+      }
+      if (mode === 'short') {
+        for (const a of CHARS) {
+          yield a;
+          for (const b of CHARS) {
+            yield a + b;
+            for (const c of CHARS) {
+              yield a + b + c;
+              for (const d of CHARS) yield a + b + c + d;
+            }
+          }
+        }
+      }
+    }
+
+    // ── UI 控制 ───────────────────────────────────────────────
+
+    let running = false, gen = null, found = [], tried = 0, startTime = 0;
+    const $ = id => document.getElementById(id);
+
+    function log(msg, cls = 'log-info') {
+      const el = $('log');
+      const line = document.createElement('div');
+      line.className = cls;
+      line.textContent = msg;
+      el.appendChild(line);
+      if (el.children.length > 100) el.removeChild(el.firstChild);
+      el.scrollTop = el.scrollHeight;
+    }
+
+    function addResult(uid, b) {
+      found.push({ uid, ...b });
+      const list = $('resultList');
+      if (list.querySelector('.log-info')) list.innerHTML = '';
+
+      const shinyHtml = b.shiny ? `<span class="badge shiny-badge">✨ SHINY</span>` : '';
+      let avatarDesc = `${b.hat !== 'none' ? b.hat + ' ' : ''}${b.species} ${b.eye}`;
+
+      const item = document.createElement('div');
+      item.className = 'result-item';
+      item.innerHTML = `
+    <div class="result-item-top">
+      <div>
+        ${shinyHtml}
+        <strong>${avatarDesc}</strong>
+        <span class="badge ${b.rarity}" style="margin-left:12px">${b.rarity.toUpperCase()}</span>
+      </div>
+      <button class="copy-btn" onclick="navigator.clipboard.writeText('${uid}')">复制 ID</button>
+    </div>
+    <div class="uid">${uid}</div>
+  `;
+      list.appendChild(item);
+      $('statFound').textContent = found.length;
+    }
+
+    function updateStats() {
+      const elapsed = (Date.now() - startTime) / 1000;
+      const speed = elapsed > 0 ? Math.round(tried / elapsed) : 0;
+      $('statTried').textContent = tried.toLocaleString();
+      $('statSpeed').textContent = speed.toLocaleString();
+    }
+
+    function runBatch() {
+      if (!running) return;
+
+      const filters = {
+        rarity: $('targetRarity').value,
+        species: $('targetSpecies').value,
+        hat: $('targetHat').value,
+        eye: $('targetEye').value,
+        shiny: $('targetShiny').value
+      };
+
+      const maxResults = parseInt($('maxResults').value);
+      const batchSize = parseInt($('batchSize').value);
+
+      let i = 0;
+      while (i < batchSize) {
+        const { value, done } = gen.next();
+        if (done) {
+          $('statStatus').textContent = '✅ 搜索完毕';
+          log('🏁 搜索完毕，生成器已耗尽', 'log-info');
+          stop();
+          return;
+        }
+        i++; tried++;
+
+        const buddy = generateBuddy(value);
+
+        if (filters.rarity !== 'any' && buddy.rarity !== filters.rarity) continue;
+        if (filters.species !== 'any' && buddy.species !== filters.species) continue;
+        if (filters.hat !== 'any' && buddy.hat !== filters.hat) continue;
+        if (filters.eye !== 'any' && buddy.eye !== filters.eye) continue;
+        if (filters.shiny !== 'any' && (filters.shiny === 'true') !== buddy.shiny) continue;
+
+        addResult(value, buddy);
+        const prefix = buddy.shiny ? '✨ ' : '';
+        // 日志里截断显示，防止太长刷屏
+        const shortUid = value.length > 20 ? value.substring(0, 8) + '...' : value;
+        log(`🎉 命中! ID: ${shortUid} → ${prefix}${buddy.species} [${buddy.rarity}]`, buddy.shiny ? 'log-shiny' : 'log-found');
+
+        if (found.length >= maxResults) {
+          $('statStatus').textContent = `✅ 已找到 ${maxResults} 个`;
+          log(`🎯 已达到目标数量 (${maxResults}个)，自动停止。`, 'log-info');
+          updateStats();
+          stop();
+          return;
+        }
+      }
+
+      updateStats();
+      $('progressFill').style.width = Math.min((tried % 1000000) / 1000000 * 100, 100) + '%';
+      setTimeout(runBatch, 0);
+    }
+
+    function start() {
+      const mode = $('searchMode').value;
+
+      if (['targetRarity', 'targetSpecies', 'targetHat', 'targetEye', 'targetShiny'].every(id => $(id).value === 'any')) {
+        if (!confirm("⚠️ 警告：所有条件都是【任意】！\n这样搜索会瞬间结束并返回前几个结果。确定要继续吗？")) return;
+      }
+
+      found = []; tried = 0; startTime = Date.now();
+      $('resultList').innerHTML = '<p class="log-info" style="font-size:.85em">拼命运算中...</p>';
+      $('log').innerHTML = '';
+      gen = makeGenerator(mode);
+      running = true;
+
+      $('btnStart').disabled = true;
+      $('btnStop').disabled = false;
+      $('statStatus').textContent = '🔍 疯狂计算中...';
+      $('statFound').textContent = '0';
+
+      log(`🚀 开始执行爆破...`);
+      runBatch();
+    }
+
+    function stop() {
+      running = false;
+      $('btnStart').disabled = false;
+      $('btnStop').disabled = true;
+      if ($('statStatus').textContent === '🔍 疯狂计算中...')
+        $('statStatus').textContent = '⏹ 已手动停止';
+      updateStats();
+    }
+
+    $('btnStart').onclick = start;
+    $('btnStop').onclick = stop;
+    $('btnClear').onclick = () => {
+      found = [];
+      $('resultList').innerHTML = '<p class="log-info" style="font-size:.85em">已清空</p>';
+      $('statFound').textContent = '0';
+      $('log').innerHTML = '';
+      $('statTried').textContent = '0';
+      $('progressFill').style.width = '0';
+    };
+  </script>
+</body>
+
+</html>
