@@ -1,4 +1,4 @@
-# 🐾 Claude Code Buddy 爆破器 Pro Max
+# 🐾 拒绝非酋！自定义你的claude宠物！
 
 <p align="center">
   <img src="https://img.shields.io/badge/Environment-Pure%20Browser-success?style=flat-square" alt="Environment">
